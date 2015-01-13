@@ -52,7 +52,7 @@ func takeSnapshot(req *SnapshotRequest) (res *SnapshotResult) {
 	}
 
 	dbuf := make([]byte, base64.StdEncoding.DecodedLen(len(body)))
-	n, err := base64.StdEncoding.Decode(dbuf, []byte(body))
+	n, err := base64.StdEncoding.Decode(dbuf, body)
 	if err != nil {
 		return &SnapshotResult{nil, fmt.Errorf("base64 decoding failed: %s", err)}
 	}
@@ -76,7 +76,7 @@ func takeSnapshotContext(req *SnapshotRequest) {
 	log.Printf("[%p] take snapshot for %s", req, req.url)
 	res := takeSnapshot(req)
 	if res.error != nil {
-		log.Printf("[%p] take snapshot for %s failed: ", req, res.error)
+		log.Printf("[%p] take snapshot for %s failed: %s", req, req.url, res.error)
 	} else {
 		log.Printf("[%p] take snapshot for %s completed", req, req.url)
 	}
